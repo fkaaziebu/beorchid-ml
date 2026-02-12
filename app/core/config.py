@@ -21,12 +21,16 @@ class Settings(BaseSettings):
     # Database
     DATABASE_URL: str = "sqlite:///./beorchid.db"
 
-    # CORS
-    CORS_ORIGINS: List[str] = ["*"]
+    # CORS — accepts a comma-separated string or a list
+    CORS_ORIGINS: str = "*"
 
     # Auth / secrets
     SECRET_KEY: str = "change-me-in-production"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+
+    @property
+    def cors_origins_list(self) -> List[str]:
+        return [origin.strip() for origin in self.CORS_ORIGINS.split(",")]
 
 
 settings = Settings()
