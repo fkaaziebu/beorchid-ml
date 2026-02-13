@@ -81,5 +81,21 @@ jobs:
             echo "docker-compose.yml:"
             cat docker-compose.yml
 
+            # Download and extract ML models (skip if already present)
+            if [ ! -d "./models/weights" ]; then
+              echo "Downloading ML models from Google Drive..."
+              sudo yum install -y unzip
+              FILE_ID="1vMhgT6vrKcspSxHOjT-FXJ3kDch3UO7D"
+              curl -L -o models.zip \
+                "https://drive.usercontent.google.com/download?id=${FILE_ID}&export=download&authuser=0&confirm=t&uuid=e459dcac-7aa3-473a-93cc-145d29e548cf&at=APcXIO2T81eq7H0IFPETAqooyu5l:1771009474676"
+              mkdir -p ./models
+              unzip -o models.zip -d ./models
+              rm -f models.zip
+              echo "Models extracted to ./models:"
+              ls -R ./models
+            else
+              echo "Models already present, skipping download."
+            fi
+
             # Start app
             docker compose up -d --remove-orphans

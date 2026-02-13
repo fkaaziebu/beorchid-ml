@@ -7,6 +7,6 @@ router = APIRouter(prefix="/disease", tags=["disease"])
 
 
 @router.post("/generate-prediction", response_model=PredictionResponse, status_code=200)
-def generate_disease_prediction(data: PredictionInput):
+async def generate_disease_prediction(data: PredictionInput):
     service = DiseasePredictionService()
-    return service.generate_prediction(data)
+    return await service.generate_prediction(data)
