@@ -9,9 +9,6 @@ RUN uv sync --frozen --no-dev
 
 COPY . .
 
-# Create models directory as mount point for external volume
-RUN mkdir -p /app/models
-
 EXPOSE 8000
 
 CMD ["uv", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
