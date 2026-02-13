@@ -112,5 +112,6 @@ jobs:
               echo "Models already present, skipping download."
             fi
 
-            # Start app
+            # Pull latest image and start app
+            docker pull fkaaziebu/beorchid-ml:latest
             docker compose up -d --remove-orphans
