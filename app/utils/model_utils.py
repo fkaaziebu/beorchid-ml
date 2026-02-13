@@ -701,13 +701,9 @@ class FixedEnhancedDetector(ProgressiveCropDiseaseDetector):
             print(f"🧹 Cleaned up temporary dataset: {self.temp_data_path}")
 
 
-def load_saved_model_weights(model_type="ultra_quick"):
+def load_saved_model_weights():
     """
     Helper function to load saved model weights for inference
-
-    Args:
-        crop: 'tomato', 'cassava', 'maize', 'cashew'
-        model_type: 'ultra_quick', 'quick', 'enhanced_mobilenetv2', 'enhanced_resnet50', 'enhanced_customcnn'
 
     Returns:
         model: Loaded model ready for inference
@@ -716,15 +712,8 @@ def load_saved_model_weights(model_type="ultra_quick"):
     import json
 
     # Determine filenames based on model type
-    if model_type == "ultra_quick":
-        weights_file = "ultra_quick.weights.h5"
-        info_file = "ultra_quick_classes.json"
-    elif model_type == "quick":
-        weights_file = "quick_mobilenet.weights.h5"
-        info_file = "quick_class_info.json"
-    else:
-        weights_file = f"app/models/weights/{model_type}.weights.h5"
-        info_file = f"app/models/json/{model_type}_metadata.json"
+    weights_file = "app/models/weights/enhanced_mobilenetv2.weights.h5"
+    info_file = "app/models/json/enhanced_mobilenetv2_metadata.json"
 
     # Load class info
     try:
@@ -744,20 +733,12 @@ def load_saved_model_weights(model_type="ultra_quick"):
 
         num_classes = len(class_info["unified_classes"])
 
-        if "mobilenet" in model_type.lower() or model_type in ["ultra_quick", "quick"]:
-            model = detector.create_enhanced_mobilenet_model(num_classes)
-        elif "resnet" in model_type.lower():
-            model = detector.create_enhanced_resnet_model(num_classes)
-        elif "custom" in model_type.lower():
-            model = detector.create_enhanced_custom_cnn(num_classes)
-        else:
-            print(f"❌ Unknown model type: {model_type}")
-            return None, None
+        model = detector.create_enhanced_mobilenet_model(num_classes)
 
         # Load weights
         model.load_weights(weights_file)
 
-        print(f"✅ Loaded {model_type} model:")
+        print("✅ Loaded model:")
         print(f"   📁 Weights: {weights_file}")
         print(f"   📋 Classes: {len(class_info['unified_classes'])}")
         print(f"   🎯 Accuracy: {class_info.get('accuracy', 'N/A')}")

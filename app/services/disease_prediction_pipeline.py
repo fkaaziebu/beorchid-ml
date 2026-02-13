@@ -68,10 +68,10 @@ class DiseasePredictionPipeline:
         else:
             return []
 
-    def load_crop_classifier(self, model_type="ultra_quick"):
+    def load_crop_classifier(self):
         """Load a trained crop disease classifier"""
         try:
-            model, class_info = load_saved_model_weights(model_type)
+            model, class_info = load_saved_model_weights()
             if model is not None:
                 self.crop_classifiers = {
                     "model": model,
@@ -79,7 +79,7 @@ class DiseasePredictionPipeline:
                     "classes": class_info["unified_classes"],
                     "class_indices": class_info["model_params"],
                 }
-                print(f"✅ Loaded classifier ({model_type})")
+                print("✅ Loaded classifier)")
                 return True
             else:
                 print("❌ Failed to load classifier")

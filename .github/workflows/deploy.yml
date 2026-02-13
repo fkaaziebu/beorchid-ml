@@ -88,10 +88,25 @@ jobs:
               FILE_ID="1vMhgT6vrKcspSxHOjT-FXJ3kDch3UO7D"
               curl -L -o models.zip \
                 "https://drive.usercontent.google.com/download?id=${FILE_ID}&export=download&authuser=0&confirm=t&uuid=e459dcac-7aa3-473a-93cc-145d29e548cf&at=APcXIO2T81eq7H0IFPETAqooyu5l:1771009474676"
-              mkdir -p ./models
-              unzip -o models.zip -d ./models
-              rm -f models.zip
-              echo "Models extracted to ./models:"
+              mkdir -p ./models_tmp
+              unzip -o models.zip -d ./models_tmp
+
+              # Reorganize into the flat structure the app expects
+              mkdir -p ./models/weights ./models/json
+
+              # YOLO detector
+              # cp "./models_tmp/models/models/weights/yolo/yolov8n.pt" \
+              #    "./models/weights/yolov8n.pt"
+
+              # Cashew mobilenetv2 classifier (weights + metadata)
+              cp "./models_tmp/models/models/weights/cashew/cachew_enhanced_mobilenetv2.weights (2).h5" \
+                 "./models/weights/enhanced_mobilenetv2.weights.h5"
+              cp "./models_tmp/models/models/json/cashew/cashew_enhanced_mobilenetv2_metadata (1).json" \
+                 "./models/json/enhanced_mobilenetv2_metadata.json"
+
+              # Cleanup temp
+              rm -rf ./models_tmp models.zip
+              echo "Models organized into ./models:"
               ls -R ./models
             else
               echo "Models already present, skipping download."
